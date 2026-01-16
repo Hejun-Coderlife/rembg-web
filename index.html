@@ -327,7 +327,35 @@
                     body: formData
                 });
 
-                const data = await response.json();
+                // Check if response is ok
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorMsg = `Server error (${response.status})`;
+                    try {
+                        const errorData = JSON.parse(errorText);
+                        errorMsg = errorData.error || errorMsg;
+                    } catch (e) {
+                        errorMsg = errorText || errorMsg;
+                    }
+                    showError(errorMsg);
+                    return;
+                }
+
+                // Try to parse JSON
+                let data;
+                const responseText = await response.text();
+                if (!responseText || responseText.trim() === '') {
+                    showError('Server returned empty response. The server may have crashed.');
+                    return;
+                }
+
+                try {
+                    data = JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError, 'Response:', responseText);
+                    showError('Invalid response from server. Please try again or use a smaller image.');
+                    return;
+                }
 
                 if (data.success) {
                     resultImage.src = data.image;
@@ -337,7 +365,8 @@
                     showError(data.error || 'Failed to remove background');
                 }
             } catch (err) {
-                showError('Error processing image: ' + err.message);
+                console.error('Request error:', err);
+                showError('Error processing image: ' + err.message + '. The server may be out of memory. Try a smaller image.');
             } finally {
                 loading.classList.remove('active');
             }
