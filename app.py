@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
-from rembg import remove
+from rembg import new_session, remove
 from PIL import Image
 import io
 import os
+import gc
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)  # Enable CORS for frontend
@@ -33,12 +34,19 @@ def remove_background():
         # Read image file
         input_image = file.read()
         
-        # Remove background using rembg
-        output_image = remove(input_image)
+        # Remove background using rembg with lighter model to save memory
+        session = new_session('u2netp')  # Use lighter model (less memory)
+        output_image = remove(input_image, session=session)
+        
+        # Clean up memory
+        del input_image
+        gc.collect()
         
         # Convert to base64 for sending to frontend
         import base64
         output_base64 = base64.b64encode(output_image).decode('utf-8')
+        del output_image
+        gc.collect()
         
         return jsonify({
             'success': True,
