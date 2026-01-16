@@ -13,6 +13,15 @@ CORS(app)  # Enable CORS for frontend
 os.makedirs('uploads', exist_ok=True)
 os.makedirs('outputs', exist_ok=True)
 
+# Initialize rembg session lazily (only when needed)
+rembg_session = None
+
+def get_rembg_session():
+    global rembg_session
+    if rembg_session is None:
+        rembg_session = new_session('u2netp')  # Lighter model for free tier
+    return rembg_session
+
 @app.route('/')
 def index():
     html_path = os.path.join(os.path.dirname(__file__), 'index.html')
@@ -34,9 +43,8 @@ def remove_background():
         # Read image file
         input_image = file.read()
         
-        # Remove background using rembg with lighter model to save memory
-        session = new_session('u2netp')  # Use lighter model (less memory)
-        output_image = remove(input_image, session=session)
+        # Remove background using rembg (reuse session to save memory)
+        output_image = remove(input_image, session=get_rembg_session())
         
         # Clean up memory
         del input_image
