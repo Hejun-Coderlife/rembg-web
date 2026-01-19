@@ -35,3 +35,5 @@
 127.0.0.1 - - [19/Jan/2026 10:05:57] "GET / HTTP/1.1" 200 -
 127.0.0.1 - - [19/Jan/2026 10:06:04] "GET / HTTP/1.1" 200 -
 127.0.0.1 - - [19/Jan/2026 10:06:21] "POST /api/remove-background HTTP/1.1" 200 -
+/opt/homebrew/Cellar/python@3.9/3.9.22_1/Frameworks/Python.framework/Versions/3.9/lib/python3.9/multiprocessing/resource_tracker.py:216: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
