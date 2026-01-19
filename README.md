@@ -41,6 +41,26 @@ http://localhost:5001
 
 ## Deployment
 
+### Run on GitHub Codespaces (Recommended)
+
+1. Push your code to a GitHub repository
+2. Open your repository on GitHub
+3. Click the **Code** button → **Codespaces** tab → **Create codespace on main**
+4. Wait for the codespace to start (dependencies will install automatically)
+5. In the terminal, run:
+   ```bash
+   python app.py
+   ```
+6. Click on the port forwarding notification or go to **Ports** tab
+7. Click the globe icon next to port 5001 to open the app in your browser
+
+**Note:** GitHub Codespaces has a free tier with limited hours. The app will automatically forward port 5001.
+
+### Deploy to Railway
+
+1. Connect your GitHub repository to Railway
+2. Railway will automatically detect and deploy the Flask app
+
 ### Deploy to Heroku
 
 1. Create a `Procfile`:
@@ -53,18 +73,6 @@ web: python app.py
 heroku create your-app-name
 git push heroku main
 ```
-
-### Deploy to Railway
-
-1. Connect your GitHub repository to Railway
-2. Railway will automatically detect and deploy the Flask app
-
-### Deploy to Render
-
-1. Create a new Web Service
-2. Connect your GitHub repository
-3. Set build command: `pip install -r requirements.txt`
-4. Set start command: `python app.py`
 
 ## Tech Stack
 
